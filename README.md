@@ -2,6 +2,8 @@
 
 ![](https://img.shields.io/github/issues/fahmij8/Bangkit-Final-Project) ![](https://img.shields.io/github/forks/fahmij8/Bangkit-Final-Project) ![](https://img.shields.io/github/stars/fahmij8/Bangkit-Final-Project) ![](https://img.shields.io/github/license/fahmij8/Bangkit-Final-Project)
 
+![Project Preview](preview.png)
+
 An Image-to-Caption Generator web built using Machine Learning and Tensorflow js for Deployment.
 The model itself is a combination of 2 principles, using CNN and LSTM.
 

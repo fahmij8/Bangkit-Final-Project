@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+        <title>Image Caption Generator</title>
+        <link rel="stylesheet" href="./css/caption.css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="./css/improve.css" />
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.12.0/css/all.css">
+        <link rel="stylesheet" href="./css/mfb.css" />
+        <script src="./js/mfb.js"></script>
+        <link rel="shortcut icon" href="./caracal.png">
+        <meta name="theme-color" content="#BE76A8"/>
+    </head>
+    <body>
+        <div class="tfjs-example-container container">
+            <section class='title-area'>
+                <u>
+                    <h1><img class="img-fluid pr-3" src="caracal.png" height="50px" width="50px">Image Captioning in Browser</h1>
+                </u>
+            </section>
+            <section>
+                <div class="card text-center mt-5 shadow" style="background: #ffffff;">
+                    <div class="card-header">
+                        <div id="txt" class="text-dark"></div>
+                        <button class="btn btn-primary bg-transparent border-0 text-dark" type="button" id="spinner" disabled>
+                        <span class="spinner-grow spinner-grow-sm text-danger" role="status" aria-hidden="true"></span>
+                        Getting everythings ready, please wait...
+                        </button>
+                    </div>
+                    <div class="card-body" style="background: #F7F7F7">
+                        <h5 class="card-title text-dark">Upload Your Picture Here</h5>
+                        <div class="button-wrapping">
+                            <button class="btn block mt-3" type="button" style="background-color: #9879e7;border-color: #9879e7">Upload Images                     
+                            </button>
+                            <input type="file" id="imageLoader" name="imageLoader" class="hide_file">
+                        </div>
+                        <canvas id="webgl-canvas" width="1" height="1"></canvas>
+                        <img class="img-fluid p-3 block shadow" src="" id="image" width="400">
+                        <div class="p-2">
+                            <button class="btn block mt-3" type="button" id="btn" style="background-color: #9879e7;border-color: #9879e7">Generate Caption                     
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <div id="caption-div">
+                            <h4 class="text-dark">Caption: </h4>
+                            <div id="caption"></div>
+                            <button class="btn block mt-2" type="button" id="btnPlay" style="background-color: #9879e7;border-color: #9879e7">Hear it again!                    
+                            </button>
+                            <div id="spinner-caption" class="d-inline-block">
+                                <span class="spinner-grow spinner-border-sm text-danger" role="status" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="toast alert-danger mx-auto mt-2 mb-5" role="alert" aria-live="assertive" aria-atomic="true" id="alerting2" data-autohide="false">
+                    <div class="toast-body">
+                        Your device doesn't met our minimum hardware requirements. Please move to another bigger/high-end devices.
+                    </div>
+                </div>
+                <div class="toast alert-danger mx-auto mt-2 mb-5" role="alert" aria-live="assertive" aria-atomic="true" id="alerting" data-autohide="false">
+                    <div class="toast-body">
+                        Failed to do prediction, Please reload!
+                    </div>
+                </div>
+            </section>
+            <section>
+                <footer>
+                    <div>
+                        <img src="./images/bangkit.png" class="mx-auto d-block mb-0" style="width: 150px">
+                        <img src="./images/bpartner.png" class="mx-auto d-block mt-0" style="width: 300px">
+                    </div>
+                </footer>
+            </section>
+        </div>
+        <ul id="menu" class="mfb-component--br   mfb-slidein-spring " data-mfb-toggle="hover" style="display: block;">
+            <li class="mfb-component__wrap">
+                <a href="#!" data-mfb-label="Menu" class="mfb-component__button--main">
+                <i class="mfb-component__child-icon fad fa-list-ul"></i>
+                </a>
+                <ul class="mfb-component__list">
+                    <li>
+                        <a href="https://github.com/fahmij8/Bangkit-Final-Project/tree/website" data-mfb-label="Github Repository" class="mfb-component__button--child">
+                        <i class="mfb-component__child-icon fab fa-github"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/fahmij8/Bangkit-Final-Project/blob/website/README.md" data-mfb-label="How to use" class="mfb-component__button--child">
+                        <i class="mfb-component__child-icon fas fa-question"></i>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <!-- Too small devices -->
+        <div class="restricted-content">
+            <div class="container">
+                <br><br>
+                <p><b>Your device width is too small to use our services.</b></p>
+                <p>Please move to more bigger devices</p>
+                <br>
+                <p>contact us : <a href="https://events.withgoogle.com/bangkit/" target="_blank">Bangkit academy</a></p>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.3/dist/tf.min.js"></script>
+        <!-- <script src="./model/word2idx.js"></script>
+        <script src="./model/idx2word.js"></script> -->
+        <script src="lang_model_lstmbidi/word2index.js"></script>
+        <script src="lang_model_lstmbidi/index2word.js"></script>
+        
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+        <!-- link to js file -->
+        <script src="./js/caption.js"></script>
+    </body>
+</html>
